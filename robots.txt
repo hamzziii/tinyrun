@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hamzziii.github.io/tinyrun/sitemap.xml
