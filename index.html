@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tinyrun — Tiny pixel friends that run while you focus</title>
+<meta name="description" content="Tinyrun puts a tiny pixel friend in your Mac menu bar or beside the notch. It runs while you focus, naps on your break, and keeps a simple Pomodoro timer. Twenty-four characters, no account, no tracking.">
+<meta name="keywords" content="Tinyrun, menu bar Pomodoro, focus timer Mac, pixel art, notch app, menu bar app, 뽀모도로, 집중 타이머, 메뉴바 앱, 노치 앱">
+<meta name="author" content="kimhamzziiii">
+<link rel="canonical" href="https://kimhamzziiii.github.io/tinyrun/">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="theme-color" content="#fbfbfd">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tinyrun">
+<meta property="og:title" content="Tinyrun — They run while you focus">
+<meta property="og:description" content="Twenty-four tiny pixel friends for your Mac menu bar and notch. They run while you focus and nap on your break.">
+<meta property="og:url" content="https://kimhamzziiii.github.io/tinyrun/">
+<meta property="og:image" content="https://kimhamzziiii.github.io/tinyrun/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tinyrun — They run while you focus">
+<meta name="twitter:description" content="Twenty-four tiny pixel friends for your Mac menu bar and notch. They run while you focus and nap on your break.">
+<meta name="twitter:image" content="https://kimhamzziiii.github.io/tinyrun/og.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Tinyrun",
+  "operatingSystem": "macOS 26 or later",
+  "applicationCategory": "ProductivityApplication",
+  "description": "Tiny pixel friends and a Pomodoro timer for the macOS menu bar and notch.",
+  "url": "https://kimhamzziiii.github.io/tinyrun/",
+  "author": { "@type": "Person", "name": "kimhamzziiii" }
+}
+</script>
+
+<style>
+  :root { --bg: #fbfbfd; --fg: #1d1d1f; --muted: #6e6e73; --card: #f5f5f7; --accent: #0071e3; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #000; --fg: #f5f5f7; --muted: #86868b; --card: #161617; --accent: #2997ff; }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 16px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif; }
+  a { color: inherit; }
+  h1, h2, h3, .brand { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Apple SD Gothic Neo", system-ui, sans-serif; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+  html[lang="en"] .ko, html[lang="ko"] .en { display: none; }
+
+  header.top { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center;
+               padding: 14px 0; background: color-mix(in srgb, var(--bg) 80%, transparent);
+               backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; }
+  .brand img { width: 28px; height: 28px; }
+  .lang { display: flex; gap: 4px; }
+  .lang button { border: 1px solid color-mix(in srgb, var(--muted) 35%, transparent); background: transparent; color: var(--muted);
+                 border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+  .lang button[aria-pressed="true"] { color: var(--fg); border-color: var(--fg); }
+
+  .hero { text-align: center; padding: 48px 0 20px; }
+  .hero img.icon { width: 128px; height: 128px; }
+  .hero h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1.05; margin: 18px 0 12px; font-weight: 700; letter-spacing: -0.035em; }
+  .hero p.lead { font-size: 21px; color: var(--muted); margin: 0 auto 28px; max-width: 580px; letter-spacing: -0.01em; }
+  .cta { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #fff; padding: 12px 24px;
+         border-radius: 980px; font-weight: 500; text-decoration: none; font-size: 17px; }
+  .cta:hover { filter: brightness(1.06); }
+  .cta.soon { background: var(--fg); color: var(--bg); cursor: default; }
+  .cta.soon:hover { filter: none; }
+  .meta { margin-top: 14px; font-size: 14px; color: var(--muted); }
+  .meta a { color: var(--muted); }
+
+  /* Menu bar demo */
+  .demo { margin: 44px auto 0; max-width: 760px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.18);
+          background: linear-gradient(135deg, #4f6a78 0%, #7f8f86 45%, #c9b28f 100%); }
+  .bar { position: relative; height: 40px; display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding: 0 14px;
+         background: rgba(30, 34, 40, .30); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #fff; }
+  .bar .left { margin-right: auto; display: flex; gap: 18px; font-size: 13.5px; font-weight: 500; white-space: nowrap; min-width: 0; overflow: hidden; }
+  .bar .left b { font-weight: 700; }
+  .bar svg { display: block; width: 16px; height: 16px; flex: none; }
+  .clock { font-size: 13.5px; font-weight: 500; white-space: nowrap; }
+  .pet-item { display: flex; align-items: center; gap: 4px; background: none; border: 0; color: #fff; padding: 2px 6px; margin: 0 -6px;
+              border-radius: 6px; cursor: pointer; font: 500 13.5px/1 -apple-system, system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+  .pet-item:hover { background: rgba(255,255,255,.16); }
+  .pet-item canvas { display: block; }
+  .notch { position: absolute; top: 0; left: 50%; height: 40px; background: #000; display: flex; align-items: center; gap: 6px;
+           border-radius: 0 0 14px 14px; padding: 0 14px; color: #fff; cursor: pointer;
+           font: 600 12px/1 ui-rounded, -apple-system, system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+  .notch .cam { width: 150px; flex: none; }
+  .demo[data-display="menubar"] .notch, .demo:not([data-display="menubar"]) .pet-item { display: none; }
+  .demo[data-display="menubar"] .bar .left { max-width: none; }
+  .demo:not([data-display="menubar"]) .bar .left { max-width: calc(50% - 110px); }
+  .desk { height: 170px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+          color: rgba(255,255,255,.95); font-size: 15px; text-shadow: 0 1px 8px rgba(0,0,0,.25); }
+  .controls { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 18px 0 0; }
+  .seg { display: inline-flex; flex-wrap: wrap; justify-content: center; background: var(--card); border-radius: 20px; padding: 3px; }
+  #petSeg { flex-direction: column; }
+  #petSeg .row { display: flex; flex-wrap: wrap; justify-content: center; }
+  @media (max-width: 640px) { #petSeg { flex-direction: row; } #petSeg .row { display: contents; } }
+  .seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--bg); color: var(--fg); box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+  @media (prefers-color-scheme: dark) { .seg button[aria-pressed="true"] { background: #2c2c2e; } }
+  .demo-caption { text-align: center; font-size: 14px; color: var(--muted); margin: 12px 0 0; }
+  @media (max-width: 640px) {
+    .bar { gap: 12px; padding: 0 10px; }
+    .bar .left span, .bar .opt { display: none; }
+    .notch .cam { width: 90px; }
+  }
+
+  section { padding: 64px 0 8px; }
+  h2 { font-size: 40px; letter-spacing: -0.03em; text-align: center; margin: 0 0 28px; line-height: 1.1; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .card { background: var(--card); border-radius: 18px; padding: 26px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  .pets { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+  .pet-card { background: var(--card); border-radius: 18px; padding: 22px 18px 18px; text-align: center;
+              flex: 0 1 calc((100% - 28px) / 3); min-width: 240px; box-sizing: border-box; }
+  .pet-card canvas { display: block; margin: 6px auto 16px; }
+  .pet-card h3 { margin: 0 0 4px; font-size: 17px; }
+  .pet-card p { margin: 0; color: var(--muted); font-size: 14px; min-height: 3em; }
+  ol.steps { padding-left: 22px; margin: 0 auto; max-width: 640px; }
+  ol.steps li { margin: 8px 0; }
+  #support p { margin: 0 auto; max-width: 640px; text-align: center; }
+  kbd { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; border: 1px solid color-mix(in srgb, var(--muted) 35%, transparent);
+        border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; background: var(--card); }
+  .note { background: var(--card); border-radius: 18px; padding: 18px 22px; color: var(--muted); font-size: 15px; max-width: 700px; margin: 0 auto; }
+  pre { background: var(--card); border-radius: 14px; padding: 16px 18px; overflow-x: auto; font: 12.5px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 0; }
+  .center { text-align: center; color: var(--muted); max-width: 640px; margin: 0 auto 20px; }
+
+  footer { margin: 72px 0 40px; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--muted) 25%, transparent);
+           display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./"><img src="favicon.png" alt="">Tinyrun</a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="ko">한국어</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <img class="icon" src="icon.png" alt="Tinyrun app icon" width="128" height="128">
+      <h1 class="en">They run<br>while you focus.</h1>
+      <h1 class="ko">집중하면 달리는<br>작은 친구들.</h1>
+      <p class="lead en">Twenty-four tiny pixel friends for your menu bar and notch.<br>A simple Pomodoro timer, with company.</p>
+      <p class="lead ko">메뉴 바와 노치에 사는 픽셀 친구 24명.<br>친구가 함께하는 심플한 뽀모도로.</p>
+      <span class="cta soon">
+        <svg width="16" height="19" viewBox="0 0 17 20" fill="currentColor" aria-hidden="true"><path d="M14.1 10.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.7-4zM11.6 3c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg>
+        <span class="en">Coming soon to the Mac App Store</span><span class="ko">Mac App Store 출시 예정</span>
+      </span>
+      <div class="meta">
+        <span class="en">macOS 26+ · Apple Silicon &amp; Intel · English, 한국어</span>
+        <span class="ko">macOS 26 이상 · Apple Silicon / Intel · 한국어, English</span>
+      </div>
+    </div>
+
+    <div class="demo" id="demo" data-display="menubar">
+      <div class="bar">
+        <div class="left"><b>&#63743;</b><b>Finder</b><span class="en">File</span><span class="ko">파일</span><span class="en">Edit</span><span class="ko">편집</span><span class="en">View</span><span class="ko">보기</span></div>
+        <div class="notch" id="notch" title="Tinyrun"><span class="cam"></span><canvas data-live="notch"></canvas><span class="time"></span></div>
+        <button class="pet-item" id="petItem" type="button" title="Tinyrun"><canvas data-live="bar"></canvas><span class="time"></span></button>
+        <svg class="opt" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/><path d="M6.6 5.4v5.2L10.8 8z" fill="currentColor" stroke="none"/></svg>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1.8 6.2a9 9 0 0 1 12.4 0M4 8.6a5.8 5.8 0 0 1 8 0M6.2 11a2.6 2.6 0 0 1 3.6 0"/></svg>
+        <svg viewBox="0 0 22 16" style="width:22px"><rect x="1" y="4" width="17" height="8" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"/><rect x="2.6" y="5.6" width="11" height="4.8" rx="1.2" fill="currentColor"/><rect x="19" y="6.5" width="1.6" height="3" rx=".8" fill="currentColor" opacity=".6"/></svg>
+        <span class="clock" id="clock">Fri 9:41 AM</span>
+      </div>
+      <div class="desk">
+        <span class="en" id="hintEn">↑ Click the pet to start a focus session</span>
+        <span class="ko" id="hintKo">↑ 펫을 누르면 집중이 시작돼요</span>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Pet" id="petSeg"></div>
+      <div class="seg" role="group" aria-label="Display" id="displaySeg">
+        <button type="button" data-display="menubar"><span class="en">Menu bar</span><span class="ko">메뉴 바</span></button>
+        <button type="button" data-display="left"><span class="en">Notch left</span><span class="ko">노치 왼쪽</span></button>
+        <button type="button" data-display="right"><span class="en">Notch right</span><span class="ko">노치 오른쪽</span></button>
+      </div>
+    </div>
+    <p class="demo-caption en">Try it — these are the real frames from the app.</p>
+    <p class="demo-caption ko">직접 눌러 보세요. 앱과 똑같은 프레임이에요.</p>
+
+    <section>
+      <h2 class="en">Meet the pets</h2><h2 class="ko">캐릭터</h2>
+      <div class="controls" style="margin:0 0 20px">
+        <div class="seg" role="group" aria-label="State" id="stateSeg">
+          <button type="button" data-state="idle"><span class="en">Idle</span><span class="ko">대기</span></button>
+          <button type="button" data-state="work"><span class="en">Focus</span><span class="ko">집중</span></button>
+          <button type="button" data-state="rest"><span class="en">Break</span><span class="ko">휴식</span></button>
+          <button type="button" data-state="cheer"><span class="en">Done</span><span class="ko">완료</span></button>
+        </div>
+      </div>
+      <div class="pets" id="pets"></div>
+    </section>
+
+    <section>
+      <h2 class="en">Just enough</h2><h2 class="ko">딱 필요한 만큼</h2>
+      <div class="grid">
+        <div class="card">
+          <h3 class="en">Pomodoro, built in</h3><h3 class="ko">뽀모도로 내장</h3>
+          <p class="en">Start, pause, skip ahead, stop. Focus 15–90 min, break 3–20 min. Four focus stretches make a set: a long break and a little celebration. Aim for 1–4 sets, or keep going. A warm banner when a stretch starts or ends.</p>
+          <p class="ko">시작·일시정지·건너뛰기·정지. 집중 15~90분, 휴식 3~20분. 집중 4번이 한 세트, 마치면 긴 휴식과 작은 축하. 목표는 1~4세트, 또는 제한 없이. 구간이 시작되거나 끝날 때 따뜻한 알림.</p>
+        </div>
+        <div class="card">
+          <h3 class="en">Menu bar or notch</h3><h3 class="ko">메뉴 바 또는 노치</h3>
+          <p class="en">Sit in the menu bar like a system icon, or ride along the left or right side of the MacBook notch. Hide the time to keep just the pet.</p>
+          <p class="ko">시스템 아이콘처럼 메뉴 바에, 또는 맥북 노치의 왼쪽이나 오른쪽에 붙어 있어요. 시간을 숨기고 펫만 둘 수도 있어요.</p>
+        </div>
+        <div class="card">
+          <h3 class="en">Meet the whole crew</h3><h3 class="ko">한눈에 고르기</h3>
+          <p class="en">Settings shows every pet as a card. Tap Focus, Break or Cheer and they all do it at once, then click the one you like.</p>
+          <p class="ko">설정 창에 모든 캐릭터가 카드로 나와요. 집중·휴식·축하를 누르면 다 같이 그 동작을 하고, 마음에 드는 걸 누르면 끝.</p>
+        </div>
+        <div class="card">
+          <h3 class="en">Looks native</h3><h3 class="ko">원래 있던 것처럼</h3>
+          <p class="en">One-color glyphs at system-icon size that follow light and dark menu bars, and the native macOS menu.</p>
+          <p class="ko">시스템 아이콘 크기의 단색 픽셀이라 밝은·어두운 메뉴 바에 맞춰지고, 메뉴도 macOS 기본 메뉴예요.</p>
+        </div>
+        <div class="card">
+          <h3 class="en">Nothing else</h3><h3 class="ko">그 외엔 없음</h3>
+          <p class="en">No account, no ads, no streaks, no network. Only asks for notifications so you know when a stretch ends. About 6&nbsp;MB, universal.</p>
+          <p class="ko">계정·광고·스트릭·네트워크 없음. 구간이 끝날 때 알려 주려고 알림 권한만 받아요. 약 6MB, 유니버설.</p>
+        </div>
+        <div class="card">
+          <h3 class="en">Light on your Mac</h3><h3 class="ko">가벼워요</h3>
+          <p class="en">macOS plays the animation itself, so Tinyrun barely wakes up: 0% CPU while idle, under 1% while the timer runs.</p>
+          <p class="ko">애니메이션은 macOS가 직접 재생해서 앱이 거의 깨지 않아요. 대기 중 CPU 0%, 타이머가 돌 때도 1% 미만.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="en">How to use</h2><h2 class="ko">사용법</h2>
+      <ol class="steps en">
+        <li>Click the pet in the menu bar (or next to the notch) to open the menu.</li>
+        <li>Choose <b>Start</b>. The pet runs while you focus and naps on the break.</li>
+        <li>Open <b>Settings…</b> (<kbd>⌘</kbd><kbd>,</kbd>) to pick a pet, the focus and break lengths, what happens after a set, and where it lives.</li>
+        <li>Hold <kbd>⌘</kbd> and drag to move the menu bar icon.</li>
+      </ol>
+      <ol class="steps ko">
+        <li>메뉴 바(또는 노치 옆)의 펫을 누르면 메뉴가 열려요.</li>
+        <li><b>시작</b>을 누르면 집중하는 동안 달리고, 휴식 때는 잠들어요.</li>
+        <li><b>설정…</b>(<kbd>⌘</kbd><kbd>,</kbd>)에서 캐릭터, 집중·휴식 시간, 세트를 마친 뒤 할 일, 표시 위치를 고를 수 있어요.</li>
+        <li><kbd>⌘</kbd>를 누른 채 드래그하면 메뉴 바 아이콘 위치를 옮길 수 있어요.</li>
+      </ol>
+    </section>
+
+    <section id="support">
+      <h2 class="en">Support</h2><h2 class="ko">문의·지원</h2>
+      <p class="en">Questions, bugs or ideas: email <a href="mailto:kimhamzziiii@gmail.com?subject=Tinyrun">kimhamzziiii@gmail.com</a>. Tell me your macOS version and which pet you use, and I'll reply within a few days.</p>
+      <p class="ko">궁금한 점·버그·아이디어는 <a href="mailto:kimhamzziiii@gmail.com?subject=Tinyrun">kimhamzziiii@gmail.com</a>으로 보내 주세요. macOS 버전과 쓰는 캐릭터를 같이 적어 주시면 며칠 안에 답장할게요.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span><span class="en">Made by</span><span class="ko">만든 사람</span> <a href="https://github.com/kimhamzziiii">kimhamzziiii</a></span>
+    <span><a href="#support"><span class="en">Support</span><span class="ko">문의</span></a> · <a href="privacy.html"><span class="en">Privacy</span><span class="ko">개인정보 처리방침</span></a> · <span class="en">Also by me:</span><span class="ko">다른 앱:</span> <a href="https://kimhamzziiii.github.io/slipbar/">Slip</a></span>
+  </footer>
+</div>
+
+<script src="pets.js"></script>
+<script>
+  (function () {
+    var html = document.documentElement;
+    var NAMES = { cat: ['Cat', '고양이'], dog: ['Dog', '강아지'], bunny: ['Bunny', '토끼'], chick: ['Chick', '병아리'],
+                  hamster: ['Hamster', '햄스터'], turtle: ['Turtle', '거북이'], ghost: ['Ghost', '유령'], duck: ['Rubber duck', '러버덕'],
+                  mug: ['Mug', '머그'], tomato: ['Tomato', '토마토'], cactus: ['Cactus', '선인장'], robot: ['Robot', '로봇'],
+                  kid: ['Kid', '꼬마'], monk: ['Monk', '김스님'], wizard: ['Wizard', '마법사'], ninja: ['Ninja', '닌자'],
+                  fighter: ['Fighter', '무도가'], hero: ['Hero', '히어로'], archer: ['Archer', '궁수'], astronaut: ['Astronaut', '우주인'],
+                  teacher: ['Teacher', '선생님'], chef: ['Chef', '요리사'], painter: ['Painter', '화가'], developer: ['Developer', '개발자'] };
+    var ABOUT = {
+      cat: ['Sits and swishes its tail, sprints while you focus, loafs on the break.', '앉아서 꼬리 살랑, 집중하면 전력 질주, 휴식엔 식빵 자세.'],
+      dog: ['Wags at you, trots with its ears flapping, snoozes.', '꼬리 흔들며 앉아 있다가, 귀 펄럭이며 통통, 쿨쿨.'],
+      bunny: ['Twitches its ears, bounds along leaving dust behind, ears down to sleep.', '귀 까딱, 먼지 날리며 깡충깡충, 귀 내리고 쿨쿨.'],
+      chick: ['All head and a tuft. Flaps and scurries while you focus.', '머리가 곧 몸. 집중하면 파닥파닥 종종걸음.'],
+      hamster: ['Nibbles a sunflower seed, sprints in its wheel while you focus, curls up to sleep.', '해바라기씨 오물오물, 집중하면 쳇바퀴 전력 질주, 동그랗게 말려 쿨쿨.'],
+      turtle: ['Slow and steady. Plods along while you focus, naps in its shell.', '느려도 꾸준히. 집중하면 엉금엉금, 휴식엔 등껍질 속에서 쿨쿨.'],
+      ghost: ['Floats in place, whooshes off when you focus.', '둥실둥실 떠 있다가, 집중하면 슝— 날아가요.'],
+      duck: ['The debugging duck. Bobs in the bath, beats its wings and splashes ahead while you focus.', '디버깅 러버덕. 욕조에 둥둥, 집중하면 날개 퍼덕이며 첨벙첨벙 전속력.'],
+      mug: ['A mug with steam for hair. Waddles along while you focus, hearts when you finish.', '김이 머리카락인 머그. 집중하면 뒤뚱뒤뚱 종종걸음, 끝나면 하트 뿅.'],
+      tomato: ['The pomodoro itself. Runs with its leaves spinning, rings like a kitchen timer at the end.', '뽀모도로 그 자체. 잎을 프로펠러처럼 돌리며 달리고, 끝나면 주방 타이머처럼 따르릉.'],
+      cactus: ['A round cactus in a pot. Grows while you focus, naps under its own rain cloud, blooms at the end.', '화분 속 동글 선인장. 집중하면 쑥쑥, 휴식엔 비구름 아래 쿨쿨, 끝나면 꽃이 펴요.'],
+      robot: ['A screen for a face. Marches with its chest gear turning, sits down to recharge.', '화면 얼굴 로봇. 집중하면 가슴 톱니 돌리며 행진, 휴식엔 앉아서 충전.'],
+      kid: ['Cap on. Dashes while you focus, sits down to doze on the break.', '캡 모자 꼬마. 집중하면 전력 질주, 휴식엔 앉아서 꾸벅.'],
+      monk: ['Floats in meditation, sweeps the temple yard while you focus, bows when you finish.', '둥실 좌선하다가, 집중하면 마당을 쓱싹쓱싹. 끝나면 합장하고 꾸벅.'],
+      wizard: ['Floppy hat, star staff. Winds up and casts a ring of stardust while you focus.', '고깔모자에 별 지팡이. 집중하면 기를 모아 지팡이를 휙, 별가루 고리가 퍼져요.'],
+      ninja: ['Twirls a shuriken, then throws: wind-up, both hands, from mid-air. Bullseye, and poof.', '표창 빙글빙글. 집중하면 휙, 양손으로 휙휙, 점프해서 휙. 끝나면 과녁 명중, 펑!'],
+      fighter: ['Headband and gi. Jab, jab, front kick, then gathers a palm blast. A rising uppercut at the end.', '머리띠에 도복. 집중하면 잽 잽, 앞차기, 기 모아 장풍! 끝나면 솟구치는 어퍼컷.'],
+      hero: ['Mask and cape. Hands on hips, then up, up and away while you focus.', '가면과 망토. 허리에 손 얹고 있다가, 집중하면 주먹 뻗고 하늘로 슝.'],
+      archer: ['Hooded archer. Draws, aims with one eye shut, and looses.', '후드 쓴 궁수. 시위를 당기고, 한쪽 눈 감고 조준, 슝!'],
+      astronaut: ['Dark visor, little antenna. Bounds across the moon, plants a flag at the end.', '까만 바이저에 안테나. 집중하면 달 위를 성큼성큼, 끝나면 깃발 꽂기.'],
+      teacher: ['Hair in a bun. Writes A+B big on the board, points, wipes it clean.', '똥머리 선생님. 칠판에 A+B를 큼직하게 쓰고, 지시봉으로 톡톡, 쓱싹 지우기.'],
+      chef: ['Toque and pan. Flips a sizzling pancake high while you focus, serves the dish at the end.', '요리사 모자에 프라이팬. 집중하면 지글지글 팬케이크를 높이 휙, 끝나면 요리 짠.'],
+      painter: ['Beret and easel. Paints a landscape stroke by stroke on a blank canvas.', '베레모에 이젤. 빈 캔버스에 풍경을 한 획씩 채워 가요.'],
+      developer: ['Headphones and coffee. The screen lights up and fills with code while you focus.', '헤드폰에 커피. 집중하면 화면이 켜지고 코드가 줄줄. 끝나면 체크 표시.']
+    };
+    var ORDER = ['cat', 'dog', 'bunny', 'chick', 'hamster', 'turtle', 'ghost', 'duck', 'mug', 'tomato', 'cactus', 'robot',
+                 'kid', 'monk', 'wizard', 'ninja', 'fighter', 'hero', 'archer', 'astronaut', 'teacher', 'chef', 'painter', 'developer'];
+
+    // ── sprites ──
+    var sheets = {};
+    ORDER.forEach(function (name) {
+      var p = window.PETS[name], frames = {};
+      Object.keys(p.slots).forEach(function (s) {
+        frames[s] = p.slots[s].map(function (slot) { return { w: p.w, h: p.h, slot: slot }; });
+      });
+      var hd = new Image();
+      hd.src = 'hd/' + name + '.png';
+      hd.onload = function () { syncGallery(); };
+      sheets[name] = { speed: p.speed, frames: frames, hd: hd };
+    });
+    function resolve(sheet, state) {
+      if (sheet.frames[state]) return state;
+      if (state === 'cheer' && sheet.frames.work) return 'work';
+      return 'idle';
+    }
+    function frameAt(name, state, tick) {
+      var sheet = sheets[name];
+      if (state === 'idle' && tick % 90 >= 86 && sheet.frames.blink) state = 'blink';
+      state = resolve(sheet, state);
+      var list = sheet.frames[state], speed = sheet.speed[state] || 4;
+      return list[Math.floor(tick / speed) % list.length];
+    }
+    // Every sprite on the page is the app's frame, drawn from docs/hd (4× the cells, from the same shapes) and tinted.
+    var tint = document.createElement('canvas');
+    function drawHD(canvas, name, frame, cell, color) {
+      var img = sheets[name].hd;
+      if (!img.complete || !img.naturalWidth) return;
+      var dpr = window.devicePixelRatio || 1, w = frame.w * cell, h = frame.h * cell;
+      if (canvas.dataset.size !== w + 'x' + h + '@' + dpr) {
+        canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+        canvas.dataset.size = w + 'x' + h + '@' + dpr;
+      }
+      var fw = img.naturalHeight / frame.h * frame.w, fh = img.naturalHeight;
+      tint.width = fw; tint.height = fh;
+      var t = tint.getContext('2d');
+      t.clearRect(0, 0, fw, fh);
+      t.drawImage(img, frame.slot * fw, 0, fw, fh, 0, 0, fw, fh);
+      t.globalCompositeOperation = 'source-in';
+      t.fillStyle = color; t.fillRect(0, 0, fw, fh);
+      t.globalCompositeOperation = 'source-over';
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(tint, 0, 0, canvas.width, canvas.height);
+    }
+
+    // ── demo state (mirrors AppStore) ──
+    var demo = document.getElementById('demo');
+    var pet = 'cat', phase = 'idle', running = false, remaining = 25 * 60, cheerUntil = 0, focusesDone = 0;
+    var tick = 0, subject = '';
+    function mood() {
+      if (Date.now() < cheerUntil) return 'cheer';
+      if (!running) return 'idle';
+      return phase === 'focus' ? 'work' : 'rest';
+    }
+    function fmt(t) { t = Math.max(0, Math.round(t)); return String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); }
+    function toggle() {
+      if (phase === 'idle') { phase = 'focus'; remaining = 25 * 60; }
+      running = !running;
+      render();
+    }
+    document.getElementById('petItem').addEventListener('click', toggle);
+    document.getElementById('notch').addEventListener('click', toggle);
+    setInterval(function () {
+      if (!running) return;
+      remaining -= 1;
+      if (remaining <= 0) {
+        var setDone = phase === 'focus' && ++focusesDone % 4 === 0;
+        phase = phase === 'focus' ? 'break' : 'focus';
+        remaining = phase === 'focus' ? 25 * 60 : setDone ? 15 * 60 : 5 * 60;
+        if (setDone) cheerUntil = Date.now() + 60000;
+      }
+    }, 1000);
+
+    var live = document.querySelectorAll('canvas[data-live]');
+    var times = document.querySelectorAll('.demo .time');
+    function render() {
+      var m = mood(), key = pet + m;
+      if (key !== subject) { subject = key; tick = 0; }
+      var f = frameAt(pet, m, tick);
+      live.forEach(function (c) { drawHD(c, pet, f, 0.75, '#fff'); });
+      var showTime = running || phase !== 'idle';
+      times.forEach(function (t) { t.textContent = showTime ? fmt(remaining) : ''; });
+      var hints = running ? ['Focusing… click again to pause', '집중 중… 다시 누르면 일시정지']
+                          : phase === 'idle' ? ['↑ Click the pet to start a focus session', '↑ 펫을 누르면 집중이 시작돼요']
+                                             : ['Paused — click to resume', '일시정지 — 누르면 이어서'];
+      if (phase === 'break' && running) hints = ['Break time. Zzz…', '휴식 시간. 쿨쿨…'];
+      document.getElementById('hintEn').textContent = hints[0];
+      document.getElementById('hintKo').textContent = hints[1];
+    }
+
+    // pet + display pickers
+    var petSeg = document.getElementById('petSeg');
+    var petRows = [0, 1].map(function () {
+      var row = document.createElement('div');
+      row.className = 'row';
+      return petSeg.appendChild(row);
+    });
+    ORDER.forEach(function (name, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.dataset.pet = name;
+      b.innerHTML = '<span class="en">' + NAMES[name][0] + '</span><span class="ko">' + NAMES[name][1] + '</span>';
+      b.addEventListener('click', function () { pet = name; sync(); });
+      petRows[i < Math.ceil(ORDER.length / 2) ? 0 : 1].appendChild(b);
+    });
+    var notch = document.getElementById('notch');
+    document.querySelectorAll('#displaySeg button').forEach(function (b) {
+      b.addEventListener('click', function () { demo.dataset.display = b.dataset.display; sync(); });
+    });
+    function placeNotch() {
+      var cam = notch.querySelector('.cam'), side = demo.dataset.display;
+      notch.insertBefore(cam, side === 'right' ? notch.firstChild : null);
+      var camW = cam.offsetWidth;
+      notch.style.transform = side === 'right' ? 'translateX(' + (-camW / 2 - 14) + 'px)'
+                                               : 'translateX(calc(-100% + ' + (camW / 2 + 14) + 'px))';
+    }
+    function sync() {
+      petSeg.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.pet === pet)); });
+      document.querySelectorAll('#displaySeg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.display === demo.dataset.display)); });
+      render();
+      if (demo.dataset.display !== 'menubar') placeNotch();
+    }
+
+    // gallery
+    var galleryState = 'idle', gtick = 0;
+    var petsEl = document.getElementById('pets');
+    var cards = ORDER.map(function (name) {
+      var card = document.createElement('div');
+      card.className = 'pet-card';
+      card.innerHTML = '<canvas></canvas><h3><span class="en">' + NAMES[name][0] + '</span><span class="ko">' + NAMES[name][1] + '</span></h3>'
+        + '<p><span class="en">' + ABOUT[name][0] + '</span><span class="ko">' + ABOUT[name][1] + '</span></p>';
+      petsEl.appendChild(card);
+      return { name: name, canvas: card.querySelector('canvas') };
+    });
+    var stateButtons = document.querySelectorAll('#stateSeg button');
+    stateButtons.forEach(function (b) {
+      b.addEventListener('click', function () { galleryState = b.dataset.state; gtick = 0; syncGallery(); });
+    });
+    var fg = function () { return getComputedStyle(html).getPropertyValue('--fg').trim() || '#1d1d1f'; };
+    function syncGallery() {
+      stateButtons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.state === galleryState)); });
+      var color = fg();
+      cards.forEach(function (c) { drawHD(c.canvas, c.name, frameAt(c.name, galleryState, gtick), 2.5, color); });
+    }
+
+    setInterval(function () { tick++; gtick++; render(); syncGallery(); }, 50);
+
+    // language + clock
+    var langButtons = document.querySelectorAll('.lang button');
+    var clock = document.getElementById('clock');
+    function tickClock() {
+      clock.textContent = new Date().toLocaleString(html.lang === 'ko' ? 'ko-KR' : 'en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+    }
+    function setLang(lang) {
+      html.lang = lang;
+      langButtons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === lang)); });
+      try { localStorage.setItem('tinyrun-lang', lang); } catch (e) {}
+      tickClock();
+      if (demo.dataset.display !== 'menubar') placeNotch();
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('tinyrun-lang'); } catch (e) {}
+    setLang(saved || ((navigator.language || '').toLowerCase().indexOf('ko') === 0 ? 'ko' : 'en'));
+    langButtons.forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.lang); }); });
+    setInterval(tickClock, 30000);
+    sync(); syncGallery();
+
+    // Anonymous counters (no cookies): page views, and first visit per browser.
+    if (location.hostname.endsWith('github.io')) {
+      var hit = function (key) { fetch('https://abacus.jasoncameron.dev/hit/hamzziii-tinyrun/' + key, { keepalive: true }).catch(function () {}); };
+      hit('views');
+      try { if (!localStorage.getItem('tinyrun-visited')) { localStorage.setItem('tinyrun-visited', '1'); hit('visitors'); } } catch (e) {}
+    }
+  })();
+</script>
+</body>
+</html>
